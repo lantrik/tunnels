@@ -1,7 +1,8 @@
 from __future__ import annotations
 
+from collections.abc import Mapping
 from pathlib import Path
-from typing import Any, Dict, Mapping, Tuple
+from typing import Any
 
 import yaml
 from pydantic import BaseModel, Field, ValidationError
@@ -36,7 +37,7 @@ class Settings(BaseSettings):
 
 
 class FileConfig(BaseModel):
-    tunnels: Dict[str, int] = Field(default_factory=dict)
+    tunnels: dict[str, int] = Field(default_factory=dict)
     options: Mapping[str, int | float | str] = Field(default_factory=dict)
 
 
@@ -170,7 +171,7 @@ def _ensure_state_file(console: Console) -> dict:
     return load_yaml(STATE_PATH)
 
 
-def ensure_interactive() -> Tuple[Settings, FileConfig, dict]:
+def ensure_interactive() -> tuple[Settings, FileConfig, dict]:
     console = Console()
 
     try:

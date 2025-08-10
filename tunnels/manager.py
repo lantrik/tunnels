@@ -1,10 +1,8 @@
-from __future__ import annotations
-
 import socket
 import subprocess
 import threading
 import time
-from typing import Callable, Dict, Optional
+from collections.abc import Callable
 from uuid import uuid4
 
 from rich.console import Console
@@ -16,7 +14,7 @@ from rich.table import Table
 class TunnelManager:
     def __init__(
         self,
-        tunnels: Dict[str, int],
+        tunnels: dict[str, int],
         domain: str,
         ssh_user: str,
         ssh_port: int,
@@ -24,7 +22,7 @@ class TunnelManager:
         separate_counter: int = 4,
         scan_interval: float = 5.0,
         render_interval: float = 0.1,
-        on_temp_write: Optional[Callable[[str, int], None]] = None,
+        on_temp_write: Callable[[str, int], None] | None = None,
     ) -> None:
         self._tunnels = dict(tunnels)
 
@@ -43,14 +41,14 @@ class TunnelManager:
 
         self._stop_scanning = False
 
-        self._port_statuses: Dict[int, bool] = {}
-        self._tunnel_processes: Dict[str, subprocess.Popen] = {}
-        self._additional_tunnels: Dict[str, int] = {}
+        self._port_statuses: dict[int, bool] = {}
+        self._tunnel_processes: dict[str, subprocess.Popen] = {}
+        self._additional_tunnels: dict[str, int] = {}
 
         self._lock = threading.Lock()
 
     @property
-    def all_tunnels(self) -> Dict[str, int]:
+    def all_tunnels(self) -> dict[str, int]:
         with self._lock:
             merged = {**self._tunnels, **self._additional_tunnels}
 

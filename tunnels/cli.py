@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Dict
-
 from .config import STATE_PATH, ensure_interactive, load_yaml, save_yaml
 from .manager import TunnelManager
 
@@ -9,7 +7,7 @@ from .manager import TunnelManager
 def _persist_temp(name: str, port: int) -> None:
     state = load_yaml(STATE_PATH) or {}
 
-    temps: Dict[str, int] = state.setdefault("temporary_tunnels", {})
+    temps: dict[str, int] = state.setdefault("temporary_tunnels", {})
     temps[name] = int(port)
 
     save_yaml(STATE_PATH, state)
@@ -21,7 +19,7 @@ def run() -> None:
     base = file_cfg.tunnels or {}
     temps = (state or {}).get("temporary_tunnels") or {}
 
-    tunnels: Dict[str, int] = {
+    tunnels: dict[str, int] = {
         **base,
         **{k: int(v) for k, v in temps.items()},
     }
